@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Game</string>
+    <string name="play">Play</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="exit">Exit</string>
+    <string name="delete">Delete</string>
+    <string name="register">Register</string>
+    <string name="create_account">Don\'t find yourself?</string>
+    <string name="back">Back</string>
+    <string name="choose">Play</string>
+    <string name="hello">Hello,</string>
+    <string name="error">Player already exist or empty name</string>
+</resources>
