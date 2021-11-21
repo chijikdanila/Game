@@ -23,7 +23,7 @@ class DBHandler {
         return context.openOrCreateDatabase(dbName, MODE_PRIVATE, null);
     }
 
-    private Boolean makeQuery(String sql) {
+    private boolean makeQuery(String sql) {
         SQLiteDatabase db = openDB();
         try{
             db.execSQL(sql);
@@ -37,19 +37,20 @@ class DBHandler {
         return false;
     }
 
-    public Boolean addToDB(Player newPlayer) {
+    public boolean addToDB(Player newPlayer) {
         return makeQuery("INSERT INTO " + tableName + " VALUES ('" + newPlayer.name + "', " + newPlayer.score + ");");
     }
 
-    public Boolean rmFromDB(Player rmPlayer) {
+    public boolean rmFromDB(Player rmPlayer) {
         return makeQuery("DELETE FROM " + tableName + " WHERE (Name = '" + rmPlayer.name + "');");
     }
 
-    public Boolean updInDB(Player updPlayer) {
+    public boolean updInDB(Player updPlayer) {
         return makeQuery("UPDATE " + tableName + " SET Score = " + updPlayer.score + " WHERE Name = '"+ updPlayer.name + "';");
     }
 
-    public Boolean createDB() {
+    public boolean createDB() {
+        openDB();
         makeQuery("DROP TABLE IF EXISTS " + tableName + ";");
         makeQuery("CREATE TABLE IF NOT EXISTS " + tableName + " (" +
                 "Name TEXT NOT NULL PRIMARY KEY, " +
@@ -62,7 +63,27 @@ class DBHandler {
         return true;
     }
 
+    private boolean DBExists() {
+        SQLiteDatabase db = openDB();
+        Cursor query = null;
+        boolean isExists = false;
+        try{
+            query = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "';", null);
+            if (query.getCount() > 0)
+                isExists = true;
+        }
+        catch (Exception e){
+            Log.d("DBExists", e.getMessage());
+        }
+        query.close();
+        db.close();
+        return isExists;
+    }
+
     public ArrayList<Player> getFromDB() {
+        if (!DBExists()) {
+            createDB();
+        }
         SQLiteDatabase db = openDB();
         ArrayList<Player> players = new ArrayList<Player>();
         Cursor query = null;

@@ -10,4 +10,5 @@
     <string name="choose">Play</string>
     <string name="hello">Hello,</string>
     <string name="error">Player already exist or empty name</string>
+    <string name="play_error">Create an account or choose existed player</string>
 </resources>

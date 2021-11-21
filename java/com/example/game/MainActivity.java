@@ -1,9 +1,12 @@
 package com.example.game;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.database.sqlite.*;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -59,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         leaderboard = findViewById(R.id.leaderboard_list);
         registerForContextMenu(leaderboard);
 
+        Bundle state = getIntent().getExtras();
+        if (state != null) {
+            currentPlayer = (Player) state.get("player");
+        }
         playerName.setText(getResources().getString(R.string.hello) + " " + currentPlayer.name);
 
         UpdateLeaderboard();
@@ -99,18 +106,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void UpdateLeaderboard() {
         players = db.getFromDB();
-        ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(this, R.layout.player, R.id.player_info, players);
+        ArrayAdapter<Player> adapter = new ArrayAdapter<>(this, R.layout.player, R.id.player_info, players);
         leaderboard.setAdapter(adapter);
     }
 
+    public void OnPlayClick(View view) {
+        if (currentPlayer.name == "Guest") {
+            Toast.makeText(this, getResources().getString(R.string.play_error), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Intent intent = new Intent(this, Game.class);
+            intent.putExtra("player", currentPlayer);
+            startActivity(intent);
+        }
+    }
+
     public void OnRegisterClick(View view) {
-        if (createPlayer.getText() != null) {
+        if (createPlayer.getText().toString().isEmpty()) {
+            Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+        }
+        else {
             db.addToDB(new Player(createPlayer.getText().toString(), 0));
             createPlayer.setText("");
             UpdateLeaderboard();
-        }
-        else {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
         }
     }
 

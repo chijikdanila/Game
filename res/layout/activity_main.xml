@@ -51,6 +51,7 @@
         android:layout_height="60dp"
         android:text="@string/play"
         android:layout_marginTop="220dp"
+        android:onClick="OnPlayClick"
         app:layout_constraintBottom_toTopOf="@id/leaderboard_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

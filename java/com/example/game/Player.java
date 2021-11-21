@@ -1,8 +1,11 @@
 package com.example.game;
 
-import java.util.ArrayList;
 
-public class Player {
+import androidx.annotation.NonNull;
+
+import java.io.Serializable;
+
+public class Player implements Serializable {
     public String name;
     public int score;
 
@@ -11,8 +14,9 @@ public class Player {
         this.score = score;
     }
 
+    @NonNull
     @Override
     public String toString() {
-        return name + "\t" + score;
+        return name + " " + score;
     }
 }
